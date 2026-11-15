@@ -34,8 +34,8 @@
     document.getElementById('resultName').textContent = 'Wachs: ' + r.name;
     document.getElementById('resultDesc').textContent =
       r.description + ' Schnee: ' + r.snowTemp + ' °C, ' + r.snowTypeLabel + ', ' + r.precipLabel + '.';
-    document.getElementById('resultVola').textContent =
-      r.vola.length ? r.vola.join(' oder ') : 'Kein Vola-Produkt für diese Stufe gefunden.';
+    document.getElementById('resultVola').textContent = r.products.join(', ');
+    document.getElementById('resultCompose').textContent = r.compose.text;
     document.getElementById('resultFluor').textContent = r.fluor;
     document.getElementById('resultFinish').textContent = r.finish;
 
