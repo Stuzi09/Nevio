@@ -37,9 +37,6 @@
 
     document.getElementById('tRace').textContent = r.types.race.join(' + ');
     document.getElementById('tLiquid').textContent = r.types.liquid + ' (fluorfrei)';
-    document.getElementById('tBase').textContent =
-      r.types.base.product + ', bügeln ' + r.types.base.iron + ' (' + r.types.base.why + ')';
-    document.getElementById('tFish').textContent = 'Keine Angabe im Vola-Katalog.';
 
     document.getElementById('resultFinish').textContent = r.finish;
     document.getElementById('resultCompose').textContent = r.compose.text;
