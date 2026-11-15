@@ -52,6 +52,14 @@
     result.hidden = false;
   }
 
+  if ('serviceWorker' in navigator) {
+    try {
+      navigator.serviceWorker.register('sw.js');
+    } catch (err) {
+      // Ohne Offline-Cache läuft die App trotzdem.
+    }
+  }
+
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     clearError();
