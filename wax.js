@@ -120,6 +120,25 @@
     return { needed: false, text: 'Keine Mischung nötig. Das fertige Wachs reicht.' };
   }
 
+  // Flüssigwachs: MX-E flüssig in der Farbe der Stufe (Katalog, fluorfrei).
+  const LIQUID = {
+    blau: 'MX-E Blau flüssig',
+    violett: 'MX-E Violett flüssig',
+    rot: 'MX-E Rot flüssig',
+    gelb: 'MX-E Gelb flüssig',
+  };
+
+  // Base: die Zuordnung ist eigene Ableitung aus den Katalogbeschreibungen, nicht im Katalog selbst.
+  function pickBase(snowType, wet, temp) {
+    if (snowType === 'kunst') {
+      return { product: 'Graphite Base', iron: '115 °C', why: 'abrasiver Kunstschnee' };
+    }
+    if (!wet && temp <= -15) {
+      return { product: 'VRB Base', iron: '120 °C', why: 'sehr kalt und trocken' };
+    }
+    return { product: 'Medium Base', iron: '135 °C', why: 'erste Schicht, gute Beschleunigung' };
+  }
+
   // input: { snowType, precip?, moisture? ('auto'|'trocken'|'nass'), snowTemp? | airTemp? + sky? }
   function recommend(input) {
     const snowType = input.snowType;
@@ -184,6 +203,12 @@
       finish: pickFinish(snowType, wet, moly),
       moly: moly,
       compose: pickCompose(snowType, precip, temp),
+      types: {
+        race: products,
+        liquid: LIQUID[cls.id],
+        base: pickBase(snowType, wet, temp),
+        fishscale: null,
+      },
       notes: notes,
     };
   }

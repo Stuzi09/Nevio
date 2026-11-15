@@ -31,13 +31,18 @@
 
   function render(r) {
     document.getElementById('swatch').style.background = COLORS[r.color];
-    document.getElementById('resultName').textContent = 'Wachs: ' + r.name;
+    document.getElementById('resultName').textContent = r.name;
     document.getElementById('resultDesc').textContent =
-      r.description + ' Schnee: ' + r.snowTemp + ' °C, ' + r.snowTypeLabel + ', ' + r.precipLabel + '.';
-    document.getElementById('resultVola').textContent = r.products.join(', ');
-    document.getElementById('resultCompose').textContent = r.compose.text;
-    document.getElementById('resultFluor').textContent = r.fluor;
+      r.description + ' Schnee: ' + r.snowTemp + ' °C, ' + r.snowTypeLabel + ', ' + r.precipLabel + ', ' + r.moisture + '.';
+
+    document.getElementById('tRace').textContent = r.types.race.join(' + ');
+    document.getElementById('tLiquid').textContent = r.types.liquid + ' (fluorfrei)';
+    document.getElementById('tBase').textContent =
+      r.types.base.product + ', bügeln ' + r.types.base.iron + ' (' + r.types.base.why + ')';
+    document.getElementById('tFish').textContent = 'Keine Angabe im Vola-Katalog.';
+
     document.getElementById('resultFinish').textContent = r.finish;
+    document.getElementById('resultCompose').textContent = r.compose.text;
 
     const notes = document.getElementById('resultNotes');
     notes.replaceChildren();

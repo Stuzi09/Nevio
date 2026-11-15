@@ -102,3 +102,17 @@ test('Ungültige Eingaben werfen einen Fehler', () => {
   assert.throws(() => Wax.recommend({ snowType: 'alt', precip: 'keiner', airTemp: -5, sky: 'nebel' }));
   assert.throws(() => Wax.recommend({ snowType: 'alt', precip: 'keiner', snowTemp: 25 }));
 });
+
+test('Vier Wachsarten: Race, Flüssigwachs, Base, Fishscale', () => {
+  const r = Wax.recommend({ snowType: 'neu', precip: 'keiner', snowTemp: -8 });
+  assert.deepEqual(r.types.race, ['LMrace Purple', 'Race Propulsor Blue']);
+  assert.equal(r.types.liquid, 'MX-E Violett flüssig');
+  assert.equal(r.types.base.product, 'Medium Base');
+  assert.equal(r.types.fishscale, null);
+});
+
+test('Base: Graphit bei Kunstschnee, VRB bei sehr kalt und trocken', () => {
+  assert.equal(Wax.recommend({ snowType: 'kunst', precip: 'keiner', snowTemp: -8 }).types.base.product, 'Graphite Base');
+  assert.equal(Wax.recommend({ snowType: 'neu', precip: 'keiner', snowTemp: -18, moisture: 'trocken' }).types.base.product, 'VRB Base');
+  assert.equal(Wax.recommend({ snowType: 'neu', precip: 'keiner', snowTemp: -18, moisture: 'nass' }).types.base.product, 'Medium Base');
+});
