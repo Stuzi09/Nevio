@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Skiwachs-Rechner</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="wrap">
+    <h1>Skiwachs-Rechner</h1>
+    <p class="lead">Schneetemperatur oder Wetter eingeben, du bekommst die passende Wachsfarbe.</p>
+
+    <form id="form" class="card" novalidate>
+      <fieldset class="modes">
+        <legend>Was hast du?</legend>
+        <label><input type="radio" name="mode" value="snow" checked> Schneetemperatur</label>
+        <label><input type="radio" name="mode" value="weather"> Wetter</label>
+      </fieldset>
+
+      <div id="snow-fields">
+        <label class="field">
+          <span>Schneetemperatur (°C)</span>
+          <input id="snowTemp" type="number" step="0.5" min="-40" max="10" placeholder="z. B. -6">
+        </label>
+      </div>
+
+      <div id="weather-fields" hidden>
+        <label class="field">
+          <span>Lufttemperatur (°C)</span>
+          <input id="airTemp" type="number" step="0.5" min="-40" max="15" placeholder="z. B. -4">
+        </label>
+        <label class="field">
+          <span>Himmel</span>
+          <select id="sky">
+            <option value="sonnig">Sonnig</option>
+            <option value="bewoelkt" selected>Bewölkt</option>
+            <option value="klar">Klar / Nacht</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>Luftfeuchte (%) <em>optional</em></span>
+          <input id="humidity" type="number" step="1" min="0" max="100" placeholder="z. B. 95">
+        </label>
+      </div>
+
+      <label class="check">
+        <input id="wet" type="checkbox">
+        <span>Schnee ist nass oder feucht</span>
+      </label>
+
+      <button type="submit">Wachs berechnen</button>
+      <p id="error" class="error" role="alert" hidden></p>
+    </form>
+
+    <section id="result" class="card result" aria-live="polite" hidden>
+      <div class="swatch" id="swatch"></div>
+      <h2 id="resultName"></h2>
+      <p id="resultDesc"></p>
+      <dl>
+        <dt>Fluor</dt>
+        <dd id="resultFluor"></dd>
+      </dl>
+      <ul id="resultNotes" class="notes"></ul>
+    </section>
+
+    <p class="hint">Die Grenzen sind Richtwerte. Bei Wachs-Fragen gilt die Tabelle des Herstellers.</p>
+  </main>
+  <script src="wax.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
