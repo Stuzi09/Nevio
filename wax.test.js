@@ -2,59 +2,77 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const Wax = require('./wax.js');
 
+const dry = { snowType: 'alt', precip: 'keiner' };
+
 test('Schneetemperatur ordnet die richtige Farbe zu', () => {
-  assert.equal(Wax.recommend({ snowTemp: 3 }).color, 'gelb');
-  assert.equal(Wax.recommend({ snowTemp: -2 }).color, 'gelb');
-  assert.equal(Wax.recommend({ snowTemp: -2.5 }).color, 'rot');
-  assert.equal(Wax.recommend({ snowTemp: -5 }).color, 'rot');
-  assert.equal(Wax.recommend({ snowTemp: -6 }).color, 'violett');
-  assert.equal(Wax.recommend({ snowTemp: -10 }).color, 'violett');
-  assert.equal(Wax.recommend({ snowTemp: -11 }).color, 'blau');
-  assert.equal(Wax.recommend({ snowTemp: -20 }).color, 'blau');
-  assert.equal(Wax.recommend({ snowTemp: -21 }).color, 'gruen');
-  assert.equal(Wax.recommend({ snowTemp: -35 }).color, 'gruen');
+  const c = (t) => Wax.recommend({ ...dry, snowTemp: t, snowType: 'alt' }).color;
+  assert.equal(c(-2.5), 'rot');
+  assert.equal(c(-5), 'rot');
+  assert.equal(c(-6), 'violett');
+  assert.equal(c(-10), 'violett');
+  assert.equal(c(-11), 'blau');
+  assert.equal(c(-20), 'blau');
+  assert.equal(c(-21), 'gruen');
 });
 
-test('Wetter-Modus schätzt die Schneetemperatur aus Luft und Himmel', () => {
+test('Lufttemperatur plus Himmel ergibt die geschätzte Schneetemperatur', () => {
   assert.equal(Wax.estimateSnowTemp(-6, 'sonnig'), -6);
   assert.equal(Wax.estimateSnowTemp(-6, 'bewoelkt'), -7);
   assert.equal(Wax.estimateSnowTemp(-6, 'klar'), -9);
 
-  // Lufttemperatur -6, klarer Himmel -> Schnee -9 -> violett
-  const r = Wax.recommend({ airTemp: -6, sky: 'klar' });
-  assert.equal(r.color, 'violett');
+  const r = Wax.recommend({ ...dry, airTemp: -6, sky: 'klar' });
   assert.equal(r.snowTemp, -9);
+  assert.equal(r.color, 'violett');
+  assert.ok(r.notes.some((n) => n.includes('geschätzt')));
 });
 
-test('Nassschnee wird eine Stufe wärmer gewählt und bekommt Fluor', () => {
-  const r = Wax.recommend({ snowTemp: -8, wet: true });
+test('Eine echte Schneetemperatur hat Vorrang vor der Schätzung', () => {
+  const r = Wax.recommend({ snowType: 'neu', precip: 'keiner', airTemp: -2, sky: 'sonnig', snowTemp: -12 });
+  assert.equal(r.snowTemp, -12);
+  assert.equal(r.color, 'blau');
+});
+
+test('Regen macht den Schnee nass, Wachs eine Stufe wärmer, Fluor', () => {
+  const r = Wax.recommend({ snowType: 'alt', precip: 'regen', snowTemp: -8 });
   assert.equal(r.color, 'rot');
   assert.equal(r.wet, true);
   assert.match(r.fluor, /Fluor empfohlen/);
+  assert.equal(r.finishKey, 'grob');
+  assert.deepEqual(r.vola, ['Vola HMach Red']);
 });
 
-test('Nass wird bei der wärmsten Stufe nicht weiter verschoben', () => {
-  const r = Wax.recommend({ snowTemp: 1, wet: true });
-  assert.equal(r.color, 'gelb');
-});
-
-test('Hohe Luftfeuchte nahe Null setzt Nassschnee automatisch', () => {
-  const r = Wax.recommend({ airTemp: -1, sky: 'bewoelkt', humidity: 95 });
+test('Schnee nahe Null gilt als nass', () => {
+  const r = Wax.recommend({ snowType: 'alt', precip: 'keiner', snowTemp: -0.5 });
   assert.equal(r.wet, true);
-  // Schnee -2 -> gelb (Stufe 0), nass bleibt bei gelb
   assert.equal(r.color, 'gelb');
 });
 
-test('Trockene Kälte bleibt ohne Nass-Verschiebung und ohne Fluor-Pflicht', () => {
-  const r = Wax.recommend({ airTemp: -15, sky: 'sonnig', humidity: 60 });
-  assert.equal(r.wet, false);
+test('Trockene Kälte: fluorfrei und feine Struktur bei Neuschnee', () => {
+  const r = Wax.recommend({ snowType: 'neu', precip: 'keiner', snowTemp: -15 });
   assert.equal(r.color, 'blau');
+  assert.equal(r.wet, false);
   assert.match(r.fluor, /Fluorfrei/);
+  assert.equal(r.finishKey, 'fein');
+});
+
+test('Kunstschnee bekommt mittlere Struktur und einen Hinweis zum Wachs', () => {
+  const r = Wax.recommend({ snowType: 'kunst', precip: 'keiner', snowTemp: -8 });
+  assert.equal(r.finishKey, 'mittel');
+  assert.ok(r.notes.some((n) => n.includes('Kunstschnee')));
+});
+
+test('Vola-Produkte kommen aus der Stufe, Grün hat keine Empfehlung', () => {
+  assert.deepEqual(Wax.recommend({ ...dry, snowTemp: -8 }).vola, ['Vola MX Purple', 'Vola Race Violet (flüssig)']);
+  const g = Wax.recommend({ ...dry, snowTemp: -25 });
+  assert.equal(g.color, 'gruen');
+  assert.deepEqual(g.vola, []);
+  assert.ok(g.notes.some((n) => n.includes('kein Vola-Produkt')));
 });
 
 test('Ungültige Eingaben werfen einen Fehler', () => {
-  assert.throws(() => Wax.recommend({ airTemp: 'kalt', sky: 'sonnig' }));
-  assert.throws(() => Wax.recommend({ airTemp: -5, sky: 'nebel' }));
-  assert.throws(() => Wax.recommend({ snowTemp: 25 }));
-  assert.throws(() => Wax.recommend({ snowTemp: -60 }));
+  assert.throws(() => Wax.recommend({ snowType: 'nebel', precip: 'keiner', snowTemp: -5 }));
+  assert.throws(() => Wax.recommend({ snowType: 'alt', precip: 'hagel', snowTemp: -5 }));
+  assert.throws(() => Wax.recommend({ snowType: 'alt', precip: 'keiner', airTemp: 'kalt', sky: 'sonnig' }));
+  assert.throws(() => Wax.recommend({ snowType: 'alt', precip: 'keiner', airTemp: -5, sky: 'nebel' }));
+  assert.throws(() => Wax.recommend({ snowType: 'alt', precip: 'keiner', snowTemp: 25 }));
 });

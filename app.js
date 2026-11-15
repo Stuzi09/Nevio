@@ -1,7 +1,5 @@
 (function () {
   const form = document.getElementById('form');
-  const snowFields = document.getElementById('snow-fields');
-  const weatherFields = document.getElementById('weather-fields');
   const errorEl = document.getElementById('error');
   const result = document.getElementById('result');
 
@@ -12,10 +10,6 @@
     blau: '#1f6fd1',
     gruen: '#2e9e4f',
   };
-
-  function currentMode() {
-    return form.querySelector('input[name="mode"]:checked').value;
-  }
 
   function readNumber(id) {
     const raw = document.getElementById(id).value.trim();
@@ -38,8 +32,12 @@
   function render(r) {
     document.getElementById('swatch').style.background = COLORS[r.color];
     document.getElementById('resultName').textContent = 'Wachs: ' + r.name;
-    document.getElementById('resultDesc').textContent = r.description;
+    document.getElementById('resultDesc').textContent =
+      r.description + ' Schnee: ' + r.snowTemp + ' °C, ' + r.snowTypeLabel + ', ' + r.precipLabel + '.';
+    document.getElementById('resultVola').textContent =
+      r.vola.length ? r.vola.join(' oder ') : 'Kein Vola-Produkt für diese Stufe gefunden.';
     document.getElementById('resultFluor').textContent = r.fluor;
+    document.getElementById('resultFinish').textContent = r.finish;
 
     const notes = document.getElementById('resultNotes');
     notes.replaceChildren();
@@ -52,46 +50,27 @@
     result.hidden = false;
   }
 
-  function syncMode() {
-    const weather = currentMode() === 'weather';
-    snowFields.hidden = weather;
-    weatherFields.hidden = !weather;
-    result.hidden = true;
-    clearError();
-  }
-
-  form.addEventListener('change', function (e) {
-    if (e.target.name === 'mode') syncMode();
-  });
-
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     clearError();
 
-    const wet = document.getElementById('wet').checked;
-    let input;
+    const airTemp = readNumber('airTemp');
+    const snowTemp = readNumber('snowTemp');
 
-    if (currentMode() === 'snow') {
-      const snowTemp = readNumber('snowTemp');
-      if (snowTemp === undefined) return showError('Bitte die Schneetemperatur eingeben.');
-      if (Number.isNaN(snowTemp)) return showError('Die Schneetemperatur ist keine gültige Zahl.');
-      input = { snowTemp: snowTemp, wet: wet };
-    } else {
-      const airTemp = readNumber('airTemp');
-      if (airTemp === undefined) return showError('Bitte die Lufttemperatur eingeben.');
-      if (Number.isNaN(airTemp)) return showError('Die Lufttemperatur ist keine gültige Zahl.');
-      const humidity = readNumber('humidity');
-      if (Number.isNaN(humidity)) return showError('Die Luftfeuchte ist keine gültige Zahl.');
-      if (humidity !== undefined && (humidity < 0 || humidity > 100)) {
-        return showError('Die Luftfeuchte muss zwischen 0 und 100 % liegen.');
-      }
-      input = {
-        airTemp: airTemp,
-        sky: document.getElementById('sky').value,
-        humidity: humidity,
-        wet: wet,
-      };
+    if (snowTemp === undefined && airTemp === undefined) {
+      return showError('Bitte mindestens die Lufttemperatur oder die Schneetemperatur eingeben.');
     }
+    if (Number.isNaN(airTemp) || Number.isNaN(snowTemp)) {
+      return showError('Eine der Temperaturen ist keine gültige Zahl.');
+    }
+
+    const input = {
+      airTemp: airTemp,
+      sky: document.getElementById('sky').value,
+      precip: document.getElementById('precip').value,
+      snowType: document.getElementById('snowType').value,
+      snowTemp: snowTemp,
+    };
 
     try {
       render(Wax.recommend(input));
@@ -99,6 +78,4 @@
       showError(err.message);
     }
   });
-
-  syncMode();
 })();

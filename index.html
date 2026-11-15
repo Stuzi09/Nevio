@@ -9,44 +9,44 @@
 <body>
   <main class="wrap">
     <h1>Skiwachs-Rechner</h1>
-    <p class="lead">Schneetemperatur oder Wetter eingeben, du bekommst die passende Wachsfarbe.</p>
+    <p class="lead">Wetter und Schnee eingeben, du bekommst Wachs, Fluor und Struktur.</p>
 
     <form id="form" class="card" novalidate>
-      <fieldset class="modes">
-        <legend>Was hast du?</legend>
-        <label><input type="radio" name="mode" value="snow" checked> Schneetemperatur</label>
-        <label><input type="radio" name="mode" value="weather"> Wetter</label>
-      </fieldset>
+      <label class="field">
+        <span>Lufttemperatur (°C)</span>
+        <input id="airTemp" type="number" step="0.5" min="-40" max="15" placeholder="z. B. -4">
+      </label>
 
-      <div id="snow-fields">
-        <label class="field">
-          <span>Schneetemperatur (°C)</span>
-          <input id="snowTemp" type="number" step="0.5" min="-40" max="10" placeholder="z. B. -6">
-        </label>
-      </div>
+      <label class="field">
+        <span>Himmel</span>
+        <select id="sky">
+          <option value="sonnig">Sonnig</option>
+          <option value="bewoelkt" selected>Bewölkt</option>
+          <option value="klar">Klar / Nacht</option>
+        </select>
+      </label>
 
-      <div id="weather-fields" hidden>
-        <label class="field">
-          <span>Lufttemperatur (°C)</span>
-          <input id="airTemp" type="number" step="0.5" min="-40" max="15" placeholder="z. B. -4">
-        </label>
-        <label class="field">
-          <span>Himmel</span>
-          <select id="sky">
-            <option value="sonnig">Sonnig</option>
-            <option value="bewoelkt" selected>Bewölkt</option>
-            <option value="klar">Klar / Nacht</option>
-          </select>
-        </label>
-        <label class="field">
-          <span>Luftfeuchte (%) <em>optional</em></span>
-          <input id="humidity" type="number" step="1" min="0" max="100" placeholder="z. B. 95">
-        </label>
-      </div>
+      <label class="field">
+        <span>Niederschlag</span>
+        <select id="precip">
+          <option value="keiner" selected>Keiner</option>
+          <option value="schnee">Schneefall</option>
+          <option value="regen">Regen</option>
+        </select>
+      </label>
 
-      <label class="check">
-        <input id="wet" type="checkbox">
-        <span>Schnee ist nass oder feucht</span>
+      <label class="field">
+        <span>Schneetyp</span>
+        <select id="snowType">
+          <option value="neu">Neuschnee</option>
+          <option value="alt" selected>Altschnee</option>
+          <option value="kunst">Kunstschnee</option>
+        </select>
+      </label>
+
+      <label class="field">
+        <span>Schneetemperatur (°C) <em>optional, sonst wird sie geschätzt</em></span>
+        <input id="snowTemp" type="number" step="0.5" min="-40" max="10" placeholder="z. B. -6">
       </label>
 
       <button type="submit">Wachs berechnen</button>
@@ -58,13 +58,17 @@
       <h2 id="resultName"></h2>
       <p id="resultDesc"></p>
       <dl>
+        <dt>Vola-Wachs</dt>
+        <dd id="resultVola"></dd>
         <dt>Fluor</dt>
         <dd id="resultFluor"></dd>
+        <dt>Belagsstruktur</dt>
+        <dd id="resultFinish"></dd>
       </dl>
       <ul id="resultNotes" class="notes"></ul>
     </section>
 
-    <p class="hint">Die Grenzen sind Richtwerte. Bei Wachs-Fragen gilt die Tabelle des Herstellers.</p>
+    <p class="hint">Die Grenzen sind Richtwerte. Die Zuordnung zu Vola-Produkten stammt aus Händlerangaben, die sich teils widersprechen. Vor dem Kauf die aktuelle Vola-Tabelle prüfen.</p>
   </main>
   <script src="wax.js"></script>
   <script src="app.js"></script>
