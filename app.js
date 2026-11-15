@@ -69,6 +69,7 @@
       sky: document.getElementById('sky').value,
       precip: document.getElementById('precip').value,
       snowType: document.getElementById('snowType').value,
+      moisture: document.getElementById('moisture').value,
       snowTemp: snowTemp,
     };
 

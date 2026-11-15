@@ -45,6 +45,15 @@
       </label>
 
       <label class="field">
+        <span>Feuchte <em>automatisch oder selbst wählen</em></span>
+        <select id="moisture">
+          <option value="auto" selected>Automatisch</option>
+          <option value="trocken">Trocken</option>
+          <option value="nass">Nass</option>
+        </select>
+      </label>
+
+      <label class="field">
         <span>Schneetemperatur (°C) <em>optional, sonst wird sie geschätzt</em></span>
         <input id="snowTemp" type="number" step="0.5" min="-40" max="10" placeholder="z. B. -6">
       </label>
