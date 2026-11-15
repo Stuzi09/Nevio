@@ -136,4 +136,65 @@ button {
   font-size: 0.9rem;
 }
 
+.site-head {
+  background: var(--card);
+  border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.site-head .wrap { padding-top: 12px; padding-bottom: 8px; }
+
+.brand { margin: 0 0 6px; font-weight: 800; letter-spacing: 0.04em; color: var(--accent); }
+
+.tabs {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.tabs a {
+  flex: 0 0 auto;
+  padding: 6px 10px;
+  border-radius: 999px;
+  color: var(--text);
+  text-decoration: none;
+  font-size: 0.9rem;
+  border: 1px solid var(--line);
+}
+
+.tabs a:hover { border-color: var(--accent); color: var(--accent); }
+
+.section { padding-top: 24px; scroll-margin-top: 110px; }
+
+.section h2 { font-size: 1.4rem; margin: 0 0 8px; }
+.section h3 { font-size: 1.05rem; margin: 20px 0 6px; }
+.section p { margin: 0 0 12px; }
+.section ul { padding-left: 18px; margin: 0 0 12px; }
+.section li { margin-bottom: 6px; }
+
+.data {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  margin: 8px 0 12px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.data th, .data td {
+  text-align: left;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+
+.data th { color: var(--muted); font-weight: 600; background: var(--bg); }
+
+.note { color: var(--muted); font-size: 0.9rem; }
+
 [hidden] { display: none !important; }

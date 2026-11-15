@@ -3,84 +3,171 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Skiwachs-Rechner</title>
+  <title>STUWax</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <header class="site-head">
+    <div class="wrap">
+      <p class="brand">STUWax</p>
+      <nav class="tabs" aria-label="Bereiche">
+        <a href="#rechner">Rechner</a>
+        <a href="#fluessig">Flüssigwachs</a>
+        <a href="#base">Base</a>
+        <a href="#race">Race Wax</a>
+        <a href="#fishscale">Fishscale</a>
+      </nav>
+    </div>
+  </header>
+
   <main class="wrap">
-    <h1>Skiwachs-Rechner</h1>
-    <p class="lead">Wetter und Schnee eingeben, du bekommst Wachs, Fluor und Struktur.</p>
+    <section id="rechner" class="section">
+      <h1>Wachs-Rechner</h1>
+      <p class="lead">Wetter und Schnee eingeben, du bekommst Wachs, Produkte und Struktur.</p>
 
-    <form id="form" class="card" novalidate>
-      <label class="field">
-        <span>Lufttemperatur (°C)</span>
-        <input id="airTemp" type="number" step="0.5" min="-40" max="15" placeholder="z. B. -4">
-      </label>
+      <form id="form" class="card" novalidate>
+        <label class="field">
+          <span>Lufttemperatur (°C)</span>
+          <input id="airTemp" type="number" step="0.5" min="-40" max="15" placeholder="z. B. -4">
+        </label>
 
-      <label class="field">
-        <span>Himmel</span>
-        <select id="sky">
-          <option value="sonnig">Sonnig</option>
-          <option value="bewoelkt" selected>Bewölkt</option>
-          <option value="klar">Klar / Nacht</option>
-        </select>
-      </label>
+        <label class="field">
+          <span>Himmel</span>
+          <select id="sky">
+            <option value="sonnig">Sonnig</option>
+            <option value="bewoelkt" selected>Bewölkt</option>
+            <option value="klar">Klar / Nacht</option>
+          </select>
+        </label>
 
-      <label class="field">
-        <span>Niederschlag</span>
-        <select id="precip">
-          <option value="keiner" selected>Keiner</option>
-          <option value="schnee">Schneefall</option>
-          <option value="regen">Regen</option>
-        </select>
-      </label>
+        <label class="field">
+          <span>Niederschlag</span>
+          <select id="precip">
+            <option value="keiner" selected>Keiner</option>
+            <option value="schnee">Schneefall</option>
+            <option value="regen">Regen</option>
+          </select>
+        </label>
 
-      <label class="field">
-        <span>Schneetyp</span>
-        <select id="snowType">
-          <option value="neu">Neuschnee</option>
-          <option value="alt" selected>Altschnee</option>
-          <option value="kunst">Kunstschnee</option>
-        </select>
-      </label>
+        <label class="field">
+          <span>Schneetyp</span>
+          <select id="snowType">
+            <option value="neu">Neuschnee</option>
+            <option value="alt" selected>Altschnee</option>
+            <option value="kunst">Kunstschnee</option>
+          </select>
+        </label>
 
-      <label class="field">
-        <span>Feuchte <em>automatisch oder selbst wählen</em></span>
-        <select id="moisture">
-          <option value="auto" selected>Automatisch</option>
-          <option value="trocken">Trocken</option>
-          <option value="nass">Nass</option>
-        </select>
-      </label>
+        <label class="field">
+          <span>Feuchte <em>automatisch oder selbst wählen</em></span>
+          <select id="moisture">
+            <option value="auto" selected>Automatisch</option>
+            <option value="trocken">Trocken</option>
+            <option value="nass">Nass</option>
+          </select>
+        </label>
 
-      <label class="field">
-        <span>Schneetemperatur (°C) <em>optional, sonst wird sie geschätzt</em></span>
-        <input id="snowTemp" type="number" step="0.5" min="-40" max="10" placeholder="z. B. -6">
-      </label>
+        <label class="field">
+          <span>Schneetemperatur (°C) <em>optional, sonst wird sie geschätzt</em></span>
+          <input id="snowTemp" type="number" step="0.5" min="-40" max="10" placeholder="z. B. -6">
+        </label>
 
-      <button type="submit">Wachs berechnen</button>
-      <p id="error" class="error" role="alert" hidden></p>
-    </form>
+        <button type="submit">Wachs berechnen</button>
+        <p id="error" class="error" role="alert" hidden></p>
+      </form>
 
-    <section id="result" class="card result" aria-live="polite" hidden>
-      <div class="swatch" id="swatch"></div>
-      <h2 id="resultName"></h2>
-      <p id="resultDesc"></p>
-      <dl>
-        <dt>Produkte</dt>
-        <dd id="resultVola"></dd>
-        <dt>Fluor</dt>
-        <dd id="resultFluor"></dd>
-        <dt>Belagsstruktur</dt>
-        <dd id="resultFinish"></dd>
-        <dt>Mischen</dt>
-        <dd id="resultCompose"></dd>
-      </dl>
-      <ul id="resultNotes" class="notes"></ul>
+      <section id="result" class="card result" aria-live="polite" hidden>
+        <div class="swatch" id="swatch"></div>
+        <h2 id="resultName"></h2>
+        <p id="resultDesc"></p>
+        <dl>
+          <dt>Produkte</dt>
+          <dd id="resultVola"></dd>
+          <dt>Fluor</dt>
+          <dd id="resultFluor"></dd>
+          <dt>Belagsstruktur</dt>
+          <dd id="resultFinish"></dd>
+          <dt>Mischen</dt>
+          <dd id="resultCompose"></dd>
+        </dl>
+        <ul id="resultNotes" class="notes"></ul>
+      </section>
+
+      <p class="hint">Die Grenzen sind Richtwerte. Grundlage ist der Vola-Katalog 2025-26. Die Stufen überlappen sich, die App wählt nach nass oder trocken.</p>
     </section>
 
-    <p class="hint">Die Grenzen sind Richtwerte. Grundlage ist der Vola-Katalog 2025-26. Die Stufen überlappen sich, die App wählt nach nass oder trocken.</p>
+    <section id="fluessig" class="section">
+      <h2>Flüssigwachs</h2>
+      <p>Vola-Flüssigwachse nutzen laut Katalog ein alternatives Lösungsmittel, das nicht als gefährlich eingestuft ist.</p>
+      <table class="data">
+        <thead>
+          <tr><th>Produkt</th><th>Temperatur (Luft)</th><th>Hinweis</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>MX-E Blau, flüssig</td><td>-25 bis -10 °C</td><td>fluorfrei</td></tr>
+          <tr><td>MX-E Violett, flüssig</td><td>-12 bis -4 °C</td><td>fluorfrei</td></tr>
+          <tr><td>MX-E Rot, flüssig</td><td>-5 bis 0 °C</td><td>fluorfrei</td></tr>
+          <tr><td>MX-E Gelb, flüssig</td><td>-2 bis +10 °C</td><td>fluorfrei</td></tr>
+          <tr><td>UNI flüssig, 1 L und 5 L</td><td>-8 bis +15 °C</td><td>Allround für viele Bedingungen</td></tr>
+          <tr><td>Hard Base flüssig, 250 ml</td><td>-</td><td>Base, siehe unten</td></tr>
+          <tr><td>Medium Base flüssig, 250 ml</td><td>-</td><td>Base, siehe unten</td></tr>
+        </tbody>
+      </table>
+      <p class="note">Die Temperaturen stammen aus dem Katalog.</p>
+    </section>
+
+    <section id="base" class="section">
+      <h2>Base</h2>
+      <p>Die Base kommt vor dem Gleitwachs auf den Belag. Sie schützt vor Abrieb und gibt Beschleunigung. Die Bügeltemperaturen stehen im Katalog pro Base.</p>
+      <table class="data">
+        <thead>
+          <tr><th>Base</th><th>Bügeln</th><th>Wann</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Hard Base</td><td>140 °C</td><td>Schutz gegen Abrieb, technische Disziplinen</td></tr>
+          <tr><td>X-Hard Base</td><td>145 °C</td><td>extra hart, härtet nach</td></tr>
+          <tr><td>Medium Base</td><td>135 °C</td><td>erste Schicht, gute Beschleunigung, GS und SuperG</td></tr>
+          <tr><td>Medium Base LMrace</td><td>125 °C</td><td>Race-Version der Medium Base</td></tr>
+          <tr><td>Soft Base</td><td>120 °C</td><td>weich, für sehr hohe Geschwindigkeiten</td></tr>
+          <tr><td>Soft Base LMrace</td><td>110 °C</td><td>Race-Version der Soft Base</td></tr>
+          <tr><td>VRB Base</td><td>120 °C</td><td>sehr kalt und trocken, Riesenslalom, Super G, Downhill</td></tr>
+          <tr><td>Graphite Base</td><td>115 °C</td><td>für Wartung, abrasiver Schnee</td></tr>
+          <tr><td>Graphite Base LMrace</td><td>125 °C</td><td>antistatische Race-Version</td></tr>
+          <tr><td>MX 901 (Premium)</td><td>120 °C</td><td>Training, Schutz gegen Abrieb</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="race" class="section">
+      <h2>Race Wax</h2>
+      <p>Die Race-Linie ist fluorfrei. Bei nassem Schnee nimmst du HMrace, bei trockenem LMrace. Moly gibt es nur bei Kunstschnee laut Chart.</p>
+      <table class="data">
+        <thead>
+          <tr><th>Stufe (Luft)</th><th>LMrace (trocken)</th><th>HMrace (nass)</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Blau, -25 bis -10 °C</td><td>LMrace Blue</td><td>HMrace Blue</td></tr>
+          <tr><td>Violett, -12 bis -4 °C</td><td>LMrace Purple</td><td>HMrace Purple</td></tr>
+          <tr><td>Rot, -5 bis 0 °C</td><td>LMrace Red</td><td>HMrace Red (bei Altschnee)</td></tr>
+          <tr><td>Gelb, -2 bis +10 °C</td><td>LMrace Yellow</td><td>HMrace Yellow (bei Altschnee)</td></tr>
+        </tbody>
+      </table>
+      <h3>Weitere Race-Produkte</h3>
+      <ul>
+        <li><strong>Propulsor:</strong> Blau für -12 bis -5 °C, Gelb für -5 bis 0 °C. Für Alt- und Kunstschnee gibt es die Moly-Version.</li>
+        <li><strong>M23 Top Finish:</strong> Spray, fluorfrei, in vier Stufen (blau, violett, rot, gelb). Wird mit Filz-Nylon-Bürste verteilt.</li>
+        <li><strong>RacePowders:</strong> Wachspulver, 40 g, Bügeltemperatur 170 °C.</li>
+        <li><strong>Race Oil HCM:</strong> nur für die Seitenwand der Ski, nicht für die Base.</li>
+      </ul>
+      <p class="note">Finish: Fine Steel, dann Nylon hält die Gleitung länger. Fleece, dann Nylon bringt sie auf den ersten Kilometern.</p>
+    </section>
+
+    <section id="fishscale" class="section">
+      <h2>Fishscale</h2>
+      <p>Zu Fishscale gibt es im Vola-Katalog keine Angaben. Im Katalog steht nur das Kick-Wachs, das im klassischen Langlauf für den Halt sorgt, zusammen mit einem Kork. Den Abschnitt fülle ich aus, wenn du mir sagst, was genau gemeint ist, oder mir eine Quelle gibst.</p>
+    </section>
   </main>
+
   <script src="wax.js"></script>
   <script src="app.js"></script>
 </body>

@@ -1,6 +1,6 @@
 # Nevio
 
-Skiwachs-Rechner. Schneetemperatur oder Wetter eingeben, du bekommst die passende Wachsfarbe mit Fluor-Hinweis.
+STUWax, ein Skiwachs-Rechner mit Infos zu Flüssigwachs, Base, Race Wax und Fishscale. Schneetemperatur oder Wetter eingeben, du bekommst die passende Wachsfarbe mit Fluor-Hinweis.
 
 ## Starten
 
